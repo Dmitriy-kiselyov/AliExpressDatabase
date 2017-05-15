@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="@localhost">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="4.1">
+    <root id="1"/>
+    <schema id="2" parent="1" name="ali_express">
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <schema id="3" parent="1" name="information_schema"/>
+    <schema id="4" parent="1" name="mysql"/>
+    <schema id="5" parent="1" name="performance_schema"/>
+    <schema id="6" parent="1" name="phpmyadmin"/>
+    <schema id="7" parent="1" name="registry"/>
+    <table id="8" parent="2" name="категории"/>
+    <table id="9" parent="2" name="покупатели"/>
+    <table id="10" parent="2" name="покупки"/>
+    <table id="11" parent="2" name="товары"/>
+    <column id="12" parent="8" name="ид">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="13" parent="8" name="название">
+      <Position>2</Position>
+      <DataType>varchar(30)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="14" parent="8" name="категории_название_index">
+      <ColNames>название</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="15" parent="8" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>ид</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="16" parent="8" name="категории_название_index">
+      <ColNames>название</ColNames>
+      <UnderlyingIndexName>категории_название_index</UnderlyingIndexName>
+    </key>
+    <column id="17" parent="9" name="ид">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="18" parent="9" name="ник">
+      <Position>2</Position>
+      <DataType>varchar(20)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="19" parent="9" name="имя">
+      <Position>3</Position>
+      <DataType>varchar(20)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="20" parent="9" name="фамилия">
+      <Position>4</Position>
+      <DataType>varchar(25)|0</DataType>
+    </column>
+    <column id="21" parent="9" name="пол">
+      <Position>5</Position>
+      <DataType>enum(&apos;М&apos;, &apos;Ж&apos;)|0</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>&apos;М&apos;</DefaultExpression>
+    </column>
+    <index id="22" parent="9" name="покупатели_ник_index">
+      <ColNames>ник</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="23" parent="9" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>ид</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="24" parent="9" name="покупатели_ник_index">
+      <ColNames>ник</ColNames>
+      <UnderlyingIndexName>покупатели_ник_index</UnderlyingIndexName>
+    </key>
+    <column id="25" parent="10" name="ид">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="26" parent="10" name="ид_покупателя">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="27" parent="10" name="дата_покупки">
+      <Position>3</Position>
+      <DataType>date|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="28" parent="10" name="дата_доставки">
+      <Position>4</Position>
+      <DataType>date|0</DataType>
+    </column>
+    <column id="29" parent="10" name="ид_товара">
+      <Position>5</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="30" parent="10" name="количество">
+      <Position>6</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="31" parent="10" name="статус">
+      <Position>7</Position>
+      <DataType>enum(&apos;проверяется&apos;, &apos;в пути&apos;, &apos;доставлен&apos;, &apos;отменен&apos;)|0</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>&apos;проверяется&apos;</DefaultExpression>
+    </column>
+    <index id="32" parent="10" name="покупки_покупатели_ид_fk">
+      <ColNames>ид_покупателя</ColNames>
+    </index>
+    <index id="33" parent="10" name="покупки_товары_ид_fk">
+      <ColNames>ид_товара</ColNames>
+    </index>
+    <key id="34" parent="10" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>ид</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="35" parent="10" name="покупки_покупатели_ид_fk">
+      <ColNames>ид_покупателя</ColNames>
+      <RefSchemaName>ali_express</RefSchemaName>
+      <RefTableName>покупатели</RefTableName>
+      <RefColNames>ид</RefColNames>
+      <OnUpdate>set-null</OnUpdate>
+      <OnDelete>set-null</OnDelete>
+    </foreign-key>
+    <foreign-key id="36" parent="10" name="покупки_товары_ид_fk">
+      <ColNames>ид_товара</ColNames>
+      <RefSchemaName>ali_express</RefSchemaName>
+      <RefTableName>товары</RefTableName>
+      <RefColNames>ид</RefColNames>
+      <OnUpdate>set-null</OnUpdate>
+      <OnDelete>set-null</OnDelete>
+    </foreign-key>
+    <column id="37" parent="11" name="ид">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="38" parent="11" name="ид_категории">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="39" parent="11" name="название">
+      <Position>3</Position>
+      <DataType>varchar(40)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="40" parent="11" name="цена">
+      <Position>4</Position>
+      <DataType>decimal(10,2)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="41" parent="11" name="описание">
+      <Position>5</Position>
+      <DataType>text|0</DataType>
+    </column>
+    <index id="42" parent="11" name="товары_категории_ид_fk">
+      <ColNames>ид_категории</ColNames>
+    </index>
+    <key id="43" parent="11" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>ид</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="44" parent="11" name="товары_категории_ид_fk">
+      <ColNames>ид_категории</ColNames>
+      <RefSchemaName>ali_express</RefSchemaName>
+      <RefTableName>категории</RefTableName>
+      <RefColNames>ид</RefColNames>
+    </foreign-key>
+  </database-model>
+</dataSource>

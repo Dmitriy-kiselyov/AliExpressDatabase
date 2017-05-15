@@ -1,0 +1,1 @@
+DROP DATABASE ali_express;

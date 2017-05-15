@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<TabPane prefHeight="700" prefWidth="1000" tabClosingPolicy="UNAVAILABLE" stylesheets="@css/style.css"
+         xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+    <tabs>
+        <Tab text="Товары">
+            <fx:include fx:id="goodsTabPage" source="goodsTabPage.fxml"/>
+        </Tab>
+    </tabs>
+</TabPane>
