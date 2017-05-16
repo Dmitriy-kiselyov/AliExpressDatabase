@@ -65,7 +65,7 @@
                                 <Font size="20.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="mLastNameField" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                        <TextField fx:id="mLastNameField" promptText="Необязательное поле..." GridPane.columnIndex="1" GridPane.rowIndex="8" />
                   <Label fx:id="mCustomerLabel" text="Выберите пользователя" GridPane.columnSpan="2" GridPane.rowIndex="1">
                      <font>
                         <Font name="System Italic" size="15.0" />

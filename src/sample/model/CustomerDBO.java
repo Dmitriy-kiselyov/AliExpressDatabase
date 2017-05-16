@@ -61,4 +61,19 @@ public class CustomerDBO {
         }
     }
 
+    public static void insertCustomer(String nickname, String name, String surname, int sex) throws SQLException {
+        try {
+            String sexStr = null;
+            if (sex == 1)
+                sexStr = "М";
+            if (sex == 2)
+                sexStr = "Ж";
+            DBUtil.insert("ali_express.покупатели", null, nickname, name, surname, sexStr, 0);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
 }

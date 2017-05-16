@@ -1,5 +1,6 @@
 package sample.controller;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import javafx.beans.binding.Bindings;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -70,6 +71,11 @@ public class CustomerTabController {
                 () -> mNicknameSearchField.getText().trim().isEmpty(),
                 mNicknameSearchField.textProperty()
         ));
+
+        ToggleGroup toggleGroup = new ToggleGroup();
+        mMaleRadio.setToggleGroup(toggleGroup);
+        mFemaleRadio.setToggleGroup(toggleGroup);
+        mMaleRadio.setSelected(true);
     }
 
     @FXML
@@ -79,6 +85,29 @@ public class CustomerTabController {
 
     @FXML
     private void handleAddCustomer() {
+        clearLog();
+        try {
+            String nick = mNicknameField.getText();
+            String name = mFirstNameField.getText();
+            String surname = mLastNameField.getText();
+            int sex = mMaleRadio.isSelected() ? 1 : 2;
+
+            CustomerDBO.insertCustomer(nick, name, surname, sex);
+            handleShowAll();
+        }
+        catch (MySQLIntegrityConstraintViolationException e) {
+            log("Произошла ошибка вставки данных.");
+            log("Такой ник уже занят.");
+        }
+        catch (SQLException e) {
+            log("Произошла ошибка вставки данных.");
+            log("Заполните все обязательные поля.");
+            log(e.toString());
+        }
+        catch (Exception e) {
+            log("Произошла неизвестная ошибка.");
+            log(e.toString());
+        }
 
     }
 
