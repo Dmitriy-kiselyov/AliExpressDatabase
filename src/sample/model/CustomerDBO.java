@@ -32,8 +32,24 @@ public class CustomerDBO {
         return list;
     }
 
-    public static ObservableList<Customer> searchGoods() throws SQLException {
+    public static ObservableList<Customer> searchCustomers() throws SQLException {
         String query = "SELECT * FROM ali_express.покупатели";
+
+        try {
+            ResultSet rs = DBUtil.execute(query);
+            return getCustomersList(rs);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public static ObservableList<Customer> searchCustomers(String nickname) throws SQLException {
+        if (nickname.isEmpty())
+            return null;
+
+        String query = "SELECT * FROM ali_express.покупатели WHERE ник LIKE '%" + nickname + "%'";
 
         try {
             ResultSet rs = DBUtil.execute(query);

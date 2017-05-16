@@ -1,5 +1,6 @@
 package sample.controller;
 
+import javafx.beans.binding.Bindings;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -65,7 +66,10 @@ public class CustomerTabController {
     }
 
     private void setupListeners() {
-
+        mSearchButton.disableProperty().bind(Bindings.createBooleanBinding(
+                () -> mNicknameSearchField.getText().trim().isEmpty(),
+                mNicknameSearchField.textProperty()
+        ));
     }
 
     @FXML
@@ -80,7 +84,27 @@ public class CustomerTabController {
 
     @FXML
     private void handleSearch() {
+        String nick = mNicknameSearchField.getText().trim();
 
+        clearLog();
+        try {
+            ObservableList<Customer> list = CustomerDBO.searchCustomers(nick);
+            mCustomerTable.setItems(list);
+            log("Данные успешно получены.");
+
+            if (list == null || list.isEmpty())
+                log("По вашему запросу не найдено ни одного пользователя.");
+            else
+                log("По вашему запросу найдено " + list.size() + " пользователей.");
+        }
+        catch (SQLException e) {
+            log("Произошла ошибка получения данных с сервера.");
+            log(e.toString());
+        }
+        catch (Exception e) {
+            log("Произошла неизвестная ошибка.");
+            log(e.toString());
+        }
     }
 
     @FXML
@@ -89,7 +113,7 @@ public class CustomerTabController {
         mNicknameSearchField.setText("");
 
         try {
-            ObservableList<Customer> list = CustomerDBO.searchGoods();
+            ObservableList<Customer> list = CustomerDBO.searchCustomers();
             mCustomerTable.setItems(list);
             log("Данные успешно получены.");
             log("Всего " + list.size() + " пользователей.");
