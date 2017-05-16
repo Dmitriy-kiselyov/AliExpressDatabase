@@ -9,5 +9,8 @@
         <Tab text="Товары">
             <fx:include fx:id="goodsTabPage" source="goodsTabPage.fxml"/>
         </Tab>
+        <Tab text="Покупатели">
+            <fx:include fx:id="customerTabPage" source="customerTabPage.fxml"/>
+        </Tab>
     </tabs>
 </TabPane>

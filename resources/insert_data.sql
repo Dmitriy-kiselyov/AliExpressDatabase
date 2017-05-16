@@ -19,10 +19,10 @@ INSERT INTO товары VALUES (NULL, 3, 'Туалетная бумага', 15.
 INSERT INTO товары
 VALUES (NULL, 3, 'Гель для душа ПАЛМОЛИВ', 80.15, 'Палмолив мой нежный гель, ты даришь запах орхидей');
 
-INSERT INTO покупатели VALUES (NULL, 'Dmitriy_penetrator', 'Дмитрий', 'Киселёв', 'М');
-INSERT INTO покупатели VALUES (NULL, 'Tanya.orlova', 'Танюша', 'Орлова', 'Ж');
-INSERT INTO покупатели VALUES (NULL, 'Vasya_228', 'Васька', 'Пупкин', 'М');
-INSERT INTO покупатели VALUES (NULL, 'MAMA_ama_KrImInAL', 'Аноним', NULL, 'М');
+INSERT INTO покупатели VALUES (NULL, 'Dmitriy_penetrator', 'Дмитрий', 'Киселёв', 'М', 1000);
+INSERT INTO покупатели VALUES (NULL, 'Tanya.orlova', 'Танюша', 'Орлова', 'Ж', 999);
+INSERT INTO покупатели VALUES (NULL, 'Vasya_228', 'Васька', 'Пупкин', 'М', 125);
+INSERT INTO покупатели VALUES (NULL, 'MAMA_ama_KrImInAL', 'Аноним', NULL, 'М', 0);
 
 INSERT INTO покупки VALUES (NULL, 1, '2017-02-15', '2017-03-25', 5, 1, 'доставлен');
 INSERT INTO покупки VALUES (NULL, 1, '2017-05-11', NULL, 3, 1, DEFAULT);

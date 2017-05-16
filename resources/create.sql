@@ -22,12 +22,13 @@ CREATE TABLE ali_express.товары
 
 CREATE TABLE ali_express.покупатели
 (
-  ид      INT PRIMARY KEY                NOT NULL AUTO_INCREMENT,
-  ник     VARCHAR(20)                    NOT NULL,
-  имя     VARCHAR(20)                    NOT NULL,
+  ид      INT PRIMARY KEY                 NOT NULL AUTO_INCREMENT,
+  ник     VARCHAR(20)                     NOT NULL,
+  имя     VARCHAR(20)                     NOT NULL,
   фамилия VARCHAR(25),
   пол     ENUM ('М', 'Ж')
-          CHARACTER SET utf8 DEFAULT 'М' NOT NULL
+          CHARACTER SET utf8 DEFAULT 'М'  NOT NULL,
+  баланс  DOUBLE(10, 2) DEFAULT 0         NOT NULL
 );
 CREATE UNIQUE INDEX покупатели_ник_index
   ON ali_express.покупатели (ник);
