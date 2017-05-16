@@ -4,8 +4,13 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 import javafx.beans.binding.Bindings;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import sample.model.Customer;
 import sample.model.CustomerDBO;
 
@@ -88,6 +93,8 @@ public class CustomerTabController {
             }
         });
         mAddMoneyButton.setDisable(true);
+
+        mShowPurchaseButton.disableProperty().bind(mCustomerTable.getSelectionModel().selectedItemProperty().isNull());
     }
 
     @FXML
@@ -194,7 +201,25 @@ public class CustomerTabController {
 
     @FXML
     private void handleShowPurchase() {
+        Customer customer = mCustomerTable.getSelectionModel().getSelectedItem();
+        if (customer == null)
+            return;
 
+        try {
+            final Stage dialog = new Stage();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/purchaseWindow.fxml"));
+            Parent root = loader.load();
+            PurchaseWindowController controller = loader.getController();
+            controller.setCustomer(customer);
+
+            dialog.setTitle("История покупок");
+            dialog.setScene(new Scene(root));
+            dialog.show();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void log(String log) {
