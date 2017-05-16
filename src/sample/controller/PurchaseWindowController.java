@@ -4,9 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import sample.model.Customer;
-import sample.model.Purchase;
-import sample.model.PurchaseDBO;
+import sample.model.*;
 
 import java.sql.Date;
 import java.sql.SQLException;
@@ -20,7 +18,7 @@ public class PurchaseWindowController {
     @FXML
     private ComboBox<String>               mCategoryCombo;
     @FXML
-    private ComboBox<String>               mNameCombo;
+    private ComboBox<Good>                 mNameCombo;
     @FXML
     private Label                          mPriceLabel;
     @FXML
@@ -56,6 +54,38 @@ public class PurchaseWindowController {
         mBalanceLabel.setText(customer.getBalance() + "");
 
         handleShowAll();
+
+        try {
+            ObservableList<String> list = GoodDBO.getCategories();
+            mCategoryCombo.setItems(list);
+        }
+        catch (SQLException e) {
+            log("Произошла фатальная ошибка! Данные о категориях не получены. " +
+                "Вы не сможете покупать товары.");
+            log(e.toString());
+        }
+
+        setupListeners();
+    }
+
+    private void setupListeners() {
+        mCategoryCombo.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            String category = newValue;
+
+            try {
+                if (category == null) {
+                    mNameCombo.setItems(null);
+                } else {
+                    ObservableList<Good> list = GoodDBO.searchGoodsFromCategory(category);
+                    mNameCombo.setItems(list);
+                }
+            }
+            catch (SQLException e) {
+                clearLog();
+                log("Данные о товарах в данной категории не получены");
+                log(e.toString());
+            }
+        });
     }
 
     @FXML
@@ -79,7 +109,7 @@ public class PurchaseWindowController {
 
     @FXML
     private void handleAddPurchase() {
-
+        
     }
 
     @FXML

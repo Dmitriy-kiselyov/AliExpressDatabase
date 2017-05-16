@@ -5,10 +5,10 @@ import javafx.beans.property.*;
 public class Good {
 
     private IntegerProperty mId;
-    private StringProperty mCategory;
-    private StringProperty mName;
-    private DoubleProperty mPrice;
-    private StringProperty mDescription;
+    private StringProperty  mCategory;
+    private StringProperty  mName;
+    private DoubleProperty  mPrice;
+    private StringProperty  mDescription;
 
     public Good() {
         mId = new SimpleIntegerProperty();
@@ -22,59 +22,65 @@ public class Good {
         return mId.get();
     }
 
-    public IntegerProperty idProperty() {
-        return mId;
-    }
-
     public void setId(int id) {
         this.mId.set(id);
+    }
+
+    public IntegerProperty idProperty() {
+        return mId;
     }
 
     public String getCategory() {
         return mCategory.get();
     }
 
-    public StringProperty categoryProperty() {
-        return mCategory;
-    }
-
     public void setCategory(String category) {
         this.mCategory.set(category);
+    }
+
+    public StringProperty categoryProperty() {
+        return mCategory;
     }
 
     public String getName() {
         return mName.get();
     }
 
-    public StringProperty nameProperty() {
-        return mName;
-    }
-
     public void setName(String name) {
         this.mName.set(name);
+    }
+
+    public StringProperty nameProperty() {
+        return mName;
     }
 
     public double getPrice() {
         return mPrice.get();
     }
 
-    public DoubleProperty priceProperty() {
-        return mPrice;
-    }
-
     public void setPrice(double price) {
         this.mPrice.set(price);
+    }
+
+    public DoubleProperty priceProperty() {
+        return mPrice;
     }
 
     public String getDescription() {
         return mDescription.get();
     }
 
+    public void setDescription(String description) {
+        this.mDescription.set(description);
+    }
+
     public StringProperty descriptionProperty() {
         return mDescription;
     }
 
-    public void setDescription(String description) {
-        this.mDescription.set(description);
+    @Override
+    public String toString() {
+        return mName.get();
     }
+
 }

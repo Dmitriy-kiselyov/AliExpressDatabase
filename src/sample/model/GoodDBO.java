@@ -47,6 +47,21 @@ public class GoodDBO {
         }
     }
 
+    public static ObservableList<Good> searchGoodsFromCategory(String category) throws SQLException {
+        String query = "SELECT товары.ид, категории.название категория, товары.название, цена, описание\n" +
+                       "FROM ali_express.товары, ali_express.категории\n" +
+                       "WHERE ид_категории = категории.ид AND категории.название = '" + category + "'\n" +
+                       "ORDER BY товары.ид;";
+        try {
+            ResultSet rs = DBUtil.execute(query);
+            return getGoodsList(rs);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
     public static ObservableList<Good> searchGoods(String name) throws SQLException {
         if (name.isEmpty())
             return null;
