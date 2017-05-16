@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane hgap="5.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="652.0" prefWidth="977.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.PurchaseWindowController">
+<GridPane hgap="5.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="652.0" prefWidth="977.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.PurchaseWindowController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="300.0" />
         <ColumnConstraints hgrow="SOMETIMES" percentWidth="0.0" />
@@ -78,15 +78,15 @@
                 <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
             </GridPane.margin>
             <center>
-                <TableView fx:id="mPurchaseView" prefHeight="200.0" prefWidth="200.0">
+                <TableView fx:id="mPurchaseTable" prefHeight="200.0" prefWidth="200.0">
                     <columns>
                         <TableColumn fx:id="mIdColumn" maxWidth="-1.0" minWidth="50.0" prefWidth="50.0" resizable="false" text="№" />
                         <TableColumn fx:id="mNameColumn" minWidth="100.0" prefWidth="128.0" text="Название" />
                         <TableColumn fx:id="mPriceColumn" minWidth="60.0" prefWidth="205.0" text="Цена" />
-                        <TableColumn fx:id="mCountColumn" minWidth="50.0" prefWidth="124.0" text="Кол-во" />
+                        <TableColumn fx:id="mCountColumn" minWidth="75.0" prefWidth="124.0" text="Кол-во" />
                         <TableColumn fx:id="mPurchaseDateColumn" minWidth="125.0" prefWidth="124.0" text="Дата покупки" />
                   <TableColumn fx:id="mDeliveryDateColumn" minWidth="125.0" prefWidth="75.0" text="Дата доставки" />
-                  <TableColumn fx:id="mStatusColumn" minWidth="50.0" prefWidth="75.0" text="Статус" />
+                  <TableColumn fx:id="mStatusColumn" minWidth="75.0" prefWidth="75.0" text="Статус" />
                     </columns>
                     <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
