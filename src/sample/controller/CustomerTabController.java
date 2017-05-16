@@ -1,8 +1,13 @@
 package sample.controller;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import sample.model.Customer;
+import sample.model.CustomerDBO;
+
+import java.sql.SQLException;
 
 public class CustomerTabController {
 
@@ -46,6 +51,24 @@ public class CustomerTabController {
     private Button                         mShowPurchaseButton;
 
     @FXML
+    private void initialize() {
+        mIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        mNicknameColumn.setCellValueFactory(new PropertyValueFactory<>("nickname"));
+        mFirstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        mLastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        mSexColumn.setCellValueFactory(new PropertyValueFactory<>("sex"));
+        mBalanceColumn.setCellValueFactory(new PropertyValueFactory<>("balance"));
+
+        setupListeners();
+
+        handleShowAll();
+    }
+
+    private void setupListeners() {
+
+    }
+
+    @FXML
     private void handleAddMoney() {
 
     }
@@ -62,12 +85,41 @@ public class CustomerTabController {
 
     @FXML
     private void handleShowAll() {
+        clearLog();
+        mNicknameSearchField.setText("");
 
+        try {
+            ObservableList<Customer> list = CustomerDBO.searchGoods();
+            mCustomerTable.setItems(list);
+            log("Данные успешно получены.");
+            log("Всего " + list.size() + " пользователей.");
+        }
+        catch (SQLException e) {
+            log("Произошла ошибка получения данных с сервера.");
+            log(e.toString());
+        }
+        catch (Exception e) {
+            log("Произошла неизвестная ошибка.");
+            log(e.toString());
+        }
     }
 
     @FXML
     private void handleShowPurchase() {
 
+    }
+
+    private void log(String log) {
+        String text = mConsoleArea.getText();
+
+        if (text.isEmpty())
+            mConsoleArea.setText(log);
+        else
+            mConsoleArea.setText(text + "\n" + log);
+    }
+
+    private void clearLog() {
+        mConsoleArea.setText("");
     }
 
 }
