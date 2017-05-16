@@ -52,6 +52,10 @@ public class DBUtil {
         st.executeUpdate(update);
     }
 
+    public static void update(String expression) throws SQLException {
+        st.executeUpdate(expression);
+    }
+
     private static String toValues(Object... values) {
         StringBuilder s = new StringBuilder("(");
         boolean first = true;

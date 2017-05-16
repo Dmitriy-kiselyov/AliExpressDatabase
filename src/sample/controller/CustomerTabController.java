@@ -76,11 +76,46 @@ public class CustomerTabController {
         mMaleRadio.setToggleGroup(toggleGroup);
         mFemaleRadio.setToggleGroup(toggleGroup);
         mMaleRadio.setSelected(true);
+
+        mCustomerTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            Customer customer = newValue;
+            if (customer == null) {
+                mCustomerLabel.setText("Выберите пользователя");
+                mAddMoneyButton.setDisable(true);
+            } else {
+                mCustomerLabel.setText(customer.getNickname() + ", баланс: " + customer.getBalance() + " рублей");
+                mAddMoneyButton.setDisable(false);
+            }
+        });
+        mAddMoneyButton.setDisable(true);
     }
 
     @FXML
     private void handleAddMoney() {
+        clearLog();
+        try {
+            double money = Double.parseDouble(mBalanceField.getText());
+            if (money < 0.01)
+                throw new NumberFormatException();
 
+            Customer customer = mCustomerTable.getSelectionModel().getSelectedItem();
+            CustomerDBO.addMoney(customer.getId(), money);
+
+            mBalanceField.setText("");
+            handleShowAll();
+        }
+        catch (NumberFormatException e) {
+            log("Ошибка ввода данных.");
+            log("Баланс - положительное действительное число.");
+        }
+        catch (SQLException e) {
+            log("Произошла ошибка вставки данных.");
+            log(e.toString());
+        }
+        catch (Exception e) {
+            log("Произошла неизвестная ошибка.");
+            log(e.toString());
+        }
     }
 
     @FXML
