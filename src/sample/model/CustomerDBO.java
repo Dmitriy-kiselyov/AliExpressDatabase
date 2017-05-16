@@ -88,4 +88,16 @@ public class CustomerDBO {
         }
     }
 
+    public static void takeMoney(int id, double value) throws SQLException {
+        String expr = "UPDATE ali_express.покупатели SET баланс = баланс - " + value +
+                      " WHERE ид = " + id;
+        try {
+            DBUtil.update(expr);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
 }

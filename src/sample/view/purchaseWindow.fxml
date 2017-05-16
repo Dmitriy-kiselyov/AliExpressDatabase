@@ -50,7 +50,7 @@
                         <Label text="Название:" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
                         <Button mnemonicParsing="false" onAction="#handleAddPurchase" text="Добавить" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
                         <Label text="Цена:" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
-                        <ComboBox fx:id="mNameCombo" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <ComboBox fx:id="mGoodsCombo" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <Label text="Оформить заказ:" GridPane.columnSpan="2">
                      <font>
                         <Font size="20.0" />

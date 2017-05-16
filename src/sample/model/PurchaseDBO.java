@@ -48,4 +48,15 @@ public class PurchaseDBO {
         }
     }
 
+    public static void insertPurchase(int customerId, int goodId, int count) throws SQLException {
+        try {
+            DBUtil.insert("ali_express.покупки", null, customerId, "CURDATE()", null,
+                          goodId, count, "проверяется");
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
 }

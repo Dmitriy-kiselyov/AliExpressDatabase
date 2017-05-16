@@ -18,7 +18,7 @@ public class PurchaseWindowController {
     @FXML
     private ComboBox<String>               mCategoryCombo;
     @FXML
-    private ComboBox<Good>                 mNameCombo;
+    private ComboBox<Good>                 mGoodsCombo;
     @FXML
     private Label                          mPriceLabel;
     @FXML
@@ -45,6 +45,25 @@ public class PurchaseWindowController {
     private TableColumn<Purchase, String>  mStatusColumn;
 
     private Customer mCustomer;
+
+    @FXML
+    private void initialize() {
+        mIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        mNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        mPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        mCountColumn.setCellValueFactory(new PropertyValueFactory<>("count"));
+        mPurchaseDateColumn.setCellValueFactory(new PropertyValueFactory<>("purchaseDate"));
+        mDeliveryDateColumn.setCellValueFactory(new PropertyValueFactory<>("deliveryDate"));
+        mStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+
+        SpinnerValueFactory<Integer> spinnerFactory =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 999, 1);
+        mCountSpinner.setValueFactory(spinnerFactory);
+
+        mCustomerLabel.setText("нет");
+        mBalanceLabel.setText("нет");
+        recount();
+    }
 
     public void setCustomer(Customer customer) {
         mCustomer = customer;
@@ -74,10 +93,10 @@ public class PurchaseWindowController {
 
             try {
                 if (category == null) {
-                    mNameCombo.setItems(null);
+                    mGoodsCombo.setItems(null);
                 } else {
                     ObservableList<Good> list = GoodDBO.searchGoodsFromCategory(category);
-                    mNameCombo.setItems(list);
+                    mGoodsCombo.setItems(list);
                 }
             }
             catch (SQLException e) {
@@ -86,20 +105,35 @@ public class PurchaseWindowController {
                 log(e.toString());
             }
         });
+
+        mGoodsCombo.getSelectionModel().selectedItemProperty()
+                   .addListener((observable, oldValue, newValue) -> recount());
+        mCountSpinner.valueProperty().addListener((observable, oldValue, newValue) -> recount());
     }
 
-    @FXML
-    private void initialize() {
-        mIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        mNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        mPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-        mCountColumn.setCellValueFactory(new PropertyValueFactory<>("count"));
-        mPurchaseDateColumn.setCellValueFactory(new PropertyValueFactory<>("purchaseDate"));
-        mDeliveryDateColumn.setCellValueFactory(new PropertyValueFactory<>("deliveryDate"));
-        mStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+    private void recount() {
+        Good good = mGoodsCombo.getValue();
+        if (good == null) {
+            mPriceLabel.setText("нет");
+            mTotalLabel.setText("нет");
+            return;
+        }
 
-        mCustomerLabel.setText("нет");
-        mBalanceLabel.setText("нет");
+        double price = good.getPrice();
+        int count = mCountSpinner.getValue();
+        double total = price * count;
+
+        mPriceLabel.setText(price + " руб.");
+        mTotalLabel.setText(round(total, 2) + " руб.");
+    }
+
+    private double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        long factor = (long) Math.pow(10, places);
+        value = value * factor;
+        long tmp = Math.round(value);
+        return (double) tmp / factor;
     }
 
     @FXML
@@ -109,7 +143,45 @@ public class PurchaseWindowController {
 
     @FXML
     private void handleAddPurchase() {
-        
+        clearLog();
+        try {
+            Good good = mGoodsCombo.getValue();
+
+            //take money
+            double cost = mCountSpinner.getValue() * good.getPrice();
+            double moneyLeft = mCustomer.getBalance() - cost;
+            if (moneyLeft < 0)
+                throw new NumberFormatException();
+
+            try {
+                CustomerDBO.takeMoney(mCustomer.getId(), cost);
+            }
+            catch (SQLException e) {
+                log("Ошибка снятия денег со счета.");
+                log(e.toString());
+            }
+
+            PurchaseDBO.insertPurchase(mCustomer.getId(), good.getId(), mCountSpinner.getValue());
+            handleShowAll();
+
+            mCustomer.setBalance(round(moneyLeft, 2));
+            mBalanceLabel.setText(round(moneyLeft, 2) + " ");
+        }
+        catch (NumberFormatException e) {
+            log("Недостаточно денег на счету.");
+        }
+        catch (NullPointerException e) {
+            log("Введите название товара.");
+        }
+        catch (SQLException e) {
+            log("Произошла ошибка вставки данных.");
+            log("Заполните все обязательные поля.");
+            log(e.toString());
+        }
+        catch (Exception e) {
+            log("Произошла неизвестная ошибка.");
+            log(e.toString());
+        }
     }
 
     @FXML

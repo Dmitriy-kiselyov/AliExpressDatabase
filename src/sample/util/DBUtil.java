@@ -73,6 +73,8 @@ public class DBUtil {
 
                 if (sVal.isEmpty())
                     s.append("NULL");
+                else if (sVal.equalsIgnoreCase("CURDATE()"))
+                    s.append(sVal);
                 else
                     s.append("'").append(sVal).append("'");
             } else if (val.getClass() == Date.class) {
