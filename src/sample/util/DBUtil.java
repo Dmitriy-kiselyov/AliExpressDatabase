@@ -3,11 +3,14 @@ package sample.util;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
+import java.util.Map;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class DBUtil {
 
@@ -98,17 +101,31 @@ public class DBUtil {
         return list;
     }
 
-    private static void exec(String path) {
+    public static void exec(String path) {
         try {
-            ClassLoader classLoader = DBUtil.class.getClassLoader();
-//            path = URLDecoder.decode(classLoader.getResource(path).getPath(), "UTF-8");
-            InputStreamReader reader = new InputStreamReader(classLoader.getResourceAsStream(path));
-
-            scriptRunner.runScript(new BufferedReader(reader));
+            scriptRunner.runScript(DBUtil.readAsset(path));
         }
         catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void executeAsset(String path, Map<String, String> replaces) throws SQLException, IOException {
+        String asset = DBUtil.readAsset(path).lines().collect(Collectors.joining("\n"));
+
+        for(Map.Entry<String, String> entry : replaces.entrySet()) {
+            asset = asset.replace("{" + entry.getKey() + "}", entry.getValue());
+        }
+
+        InputStream stream = new ByteArrayInputStream(asset.getBytes(StandardCharsets.UTF_8));
+
+        scriptRunner.runScript(new BufferedReader(new InputStreamReader(stream)));
+    }
+
+    static private BufferedReader readAsset(String path) throws IOException {
+        ClassLoader classLoader = DBUtil.class.getClassLoader();
+//            path = URLDecoder.decode(classLoader.getResource(path).getPath(), "UTF-8");
+        return new BufferedReader(new InputStreamReader(classLoader.getResourceAsStream(path)));
     }
 
 }

@@ -4,8 +4,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import sample.util.DBUtil;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PurchaseDBO {
 
@@ -48,15 +51,13 @@ public class PurchaseDBO {
         }
     }
 
-    public static void insertPurchase(int customerId, int goodId, int count) throws SQLException {
-        try {
-            DBUtil.insert("ali_express.покупки", null, customerId, "CURDATE()", null,
-                          goodId, count, "проверяется");
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            throw e;
-        }
-    }
+    public static void purchase(int customerId, int goodId, int count) throws SQLException, IOException {
+        Map<String, String> replaces = new HashMap<>();
 
+        replaces.put("customerId", String.valueOf(customerId));
+        replaces.put("goodId", String.valueOf(goodId));
+        replaces.put("count", String.valueOf(count));
+
+        DBUtil.executeAsset("buy.sql", replaces);
+    }
 }

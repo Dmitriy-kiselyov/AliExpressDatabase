@@ -153,15 +153,8 @@ public class PurchaseWindowController {
             if (moneyLeft < 0)
                 throw new NumberFormatException();
 
-            try {
-                CustomerDBO.takeMoney(mCustomer.getId(), cost);
-            }
-            catch (SQLException e) {
-                log("Ошибка снятия денег со счета.");
-                log(e.toString());
-            }
+            PurchaseDBO.purchase(mCustomer.getId(), good.getId(), mCountSpinner.getValue());
 
-            PurchaseDBO.insertPurchase(mCustomer.getId(), good.getId(), mCountSpinner.getValue());
             handleShowAll();
 
             mCustomer.setBalance(round(moneyLeft, 2));
@@ -174,7 +167,7 @@ public class PurchaseWindowController {
             log("Введите название товара.");
         }
         catch (SQLException e) {
-            log("Произошла ошибка вставки данных.");
+            log("Ошибка транзакции.");
             log("Заполните все обязательные поля.");
             log(e.toString());
         }
