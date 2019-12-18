@@ -34,3 +34,8 @@ INSERT INTO покупки VALUES (NULL, 3, '2016-10-24', '2016-11-06', 11, 5, '
 INSERT INTO покупки VALUES (NULL, 3, '2016-11-07', '2016-11-30', 11, 15, 'доставлен');
 INSERT INTO покупки VALUES (NULL, 3, '2016-12-03', NULL, 11, 120, 'отменен');
 INSERT INTO покупки VALUES (NULL, 3, '2017-04-29', NULL, 11, 50, 'в пути');
+
+INSERT INTO статусы VALUES ('проверяется', 'в пути');
+INSERT INTO статусы VALUES ('проверяется', 'отменен');
+INSERT INTO статусы VALUES ('в пути', 'доставлен');
+INSERT INTO статусы VALUES ('в пути', 'отменен');

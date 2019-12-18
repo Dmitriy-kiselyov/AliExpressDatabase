@@ -1,5 +1,7 @@
 package sample.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -12,37 +14,39 @@ import java.sql.SQLException;
 public class PurchaseWindowController {
 
     @FXML
-    private Label                          mCustomerLabel;
+    private Label mCustomerLabel;
     @FXML
-    private Label                          mBalanceLabel;
+    private Label mBalanceLabel;
     @FXML
-    private ComboBox<String>               mCategoryCombo;
+    private ComboBox<String> mCategoryCombo;
     @FXML
-    private ComboBox<Good>                 mGoodsCombo;
+    private ComboBox<Good> mGoodsCombo;
     @FXML
-    private Label                          mPriceLabel;
+    private Label mPriceLabel;
     @FXML
-    private Spinner<Integer>               mCountSpinner;
+    private Spinner<Integer> mCountSpinner;
     @FXML
-    private Label                          mTotalLabel;
+    private Label mTotalLabel;
     @FXML
-    private TextArea                       mConsoleArea;
+    private TextArea mConsoleArea;
     @FXML
-    private TableView<Purchase>            mPurchaseTable;
+    private TableView<Purchase> mPurchaseTable;
     @FXML
     private TableColumn<Purchase, Integer> mIdColumn;
     @FXML
-    private TableColumn<Purchase, String>  mNameColumn;
+    private TableColumn<Purchase, String> mNameColumn;
     @FXML
-    private TableColumn<Purchase, Double>  mPriceColumn;
+    private TableColumn<Purchase, Double> mPriceColumn;
     @FXML
     private TableColumn<Purchase, Integer> mCountColumn;
     @FXML
-    private TableColumn<Purchase, Date>    mPurchaseDateColumn;
+    private TableColumn<Purchase, Date> mPurchaseDateColumn;
     @FXML
-    private TableColumn<Purchase, Date>    mDeliveryDateColumn;
+    private TableColumn<Purchase, Date> mDeliveryDateColumn;
     @FXML
-    private TableColumn<Purchase, String>  mStatusColumn;
+    private TableColumn<Purchase, String> mStatusColumn;
+    @FXML
+    private ComboBox<String> mStatusCombo;
 
     private Customer mCustomer;
 
@@ -69,7 +73,7 @@ public class PurchaseWindowController {
         mCustomer = customer;
 
         mCustomerLabel.setText(String.format("%s, %s %s", customer.getNickname(), customer.getFirstName(),
-                                             customer.getLastName()));
+                customer.getLastName()));
         mBalanceLabel.setText(customer.getBalance() + "");
 
         handleShowAll();
@@ -80,7 +84,7 @@ public class PurchaseWindowController {
         }
         catch (SQLException e) {
             log("Произошла фатальная ошибка! Данные о категориях не получены. " +
-                "Вы не сможете покупать товары.");
+                    "Вы не сможете покупать товары.");
             log(e.toString());
         }
 
@@ -107,8 +111,33 @@ public class PurchaseWindowController {
         });
 
         mGoodsCombo.getSelectionModel().selectedItemProperty()
-                   .addListener((observable, oldValue, newValue) -> recount());
+                .addListener((observable, oldValue, newValue) -> recount());
         mCountSpinner.valueProperty().addListener((observable, oldValue, newValue) -> recount());
+
+        mPurchaseTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> this.handleTableSelected(newValue));
+    }
+
+    private void handleTableSelected(Purchase current) {
+        boolean disable = true;
+        ObservableList<String> statuses = null;
+
+        try {
+            if (current != null) {
+                statuses = PurchaseDBO.getAvailableStatuses(current.getId());
+
+                if (statuses.size() != 0) {
+                    mStatusCombo.setItems(statuses);
+                    disable = false;
+                }
+            }
+        } catch (SQLException e) {
+            clearLog();
+            log("Данные о возможных статусах не получены");
+            log(e.toString());
+        } finally {
+            mStatusCombo.setItems(statuses);
+            mStatusCombo.setDisable(disable);
+        }
     }
 
     private void recount() {

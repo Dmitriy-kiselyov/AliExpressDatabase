@@ -100,7 +100,7 @@
                     </BorderPane.margin>
                     <children>
                         <Label text="Статус:" />
-                        <ComboBox fx:id="mStatusCombo" prefWidth="150.0" />
+                        <ComboBox fx:id="mStatusCombo" prefWidth="150.0" disable="true" />
                     </children>
                 </HBox>
             </bottom>

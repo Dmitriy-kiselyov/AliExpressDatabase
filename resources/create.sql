@@ -50,3 +50,9 @@ CREATE TABLE ali_express.покупки
     ON DELETE SET NULL
     ON UPDATE SET NULL
 );
+
+CREATE TABLE ali_express.статусы
+(
+  название ENUM ('проверяется', 'в пути', 'доставлен', 'отменен') CHARACTER SET utf8 NOT NULL,
+  переход ENUM ('проверяется', 'в пути', 'доставлен', 'отменен') CHARACTER SET utf8 NOT NULL
+);

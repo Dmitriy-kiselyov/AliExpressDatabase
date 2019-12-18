@@ -60,4 +60,22 @@ public class PurchaseDBO {
 
         DBUtil.executeAsset("buy.sql", replaces);
     }
+
+    public static ObservableList<String> getAvailableStatuses(int purchaseId) throws SQLException {
+        String query = "SELECT переход FROM ali_express.статусы WHERE название = " +
+                "(SELECT статус FROM ali_express.покупки WHERE ид = " + purchaseId + ")";
+
+        try {
+            ResultSet rs = DBUtil.execute(query);
+
+            ObservableList<String> list = FXCollections.observableArrayList();
+            while (rs.next())
+                list.add(rs.getString("переход"));
+            return list;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }
