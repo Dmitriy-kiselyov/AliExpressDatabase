@@ -78,4 +78,16 @@ public class PurchaseDBO {
             throw e;
         }
     }
+
+    public static void changeStatus(int purchaseId, String status) throws SQLException {
+        String query = "UPDATE ali_express.покупки SET статус = '" + status + "' WHERE ид = " + purchaseId;
+
+        try {
+            DBUtil.update(query);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

@@ -1,7 +1,5 @@
 package sample.controller;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -114,10 +112,13 @@ public class PurchaseWindowController {
                 .addListener((observable, oldValue, newValue) -> recount());
         mCountSpinner.valueProperty().addListener((observable, oldValue, newValue) -> recount());
 
-        mPurchaseTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> this.handleTableSelected(newValue));
+        mPurchaseTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> fetchStatuses());
+
+        mStatusCombo.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> handleStatusChange(newValue));
     }
 
-    private void handleTableSelected(Purchase current) {
+    private void fetchStatuses() {
+        Purchase current = mPurchaseTable.getSelectionModel().getSelectedItem();
         boolean disable = true;
         ObservableList<String> statuses = null;
 
@@ -137,6 +138,24 @@ public class PurchaseWindowController {
         } finally {
             mStatusCombo.setItems(statuses);
             mStatusCombo.setDisable(disable);
+        }
+    }
+
+    private void handleStatusChange(String status) {
+        if (status == null) {
+            return;
+        }
+
+        try {
+            Purchase current = mPurchaseTable.getSelectionModel().getSelectedItem();
+            PurchaseDBO.changeStatus(current.getId(), status);
+            current.setStatus(status);
+
+            fetchStatuses();
+        } catch (SQLException e) {
+            clearLog();
+            log("Не удалось обновить статус");
+            log(e.toString());
         }
     }
 
@@ -163,11 +182,6 @@ public class PurchaseWindowController {
         value = value * factor;
         long tmp = Math.round(value);
         return (double) tmp / factor;
-    }
-
-    @FXML
-    private void handleStatusChange() {
-
     }
 
     @FXML
